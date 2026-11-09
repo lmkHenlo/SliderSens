@@ -1,0 +1,10 @@
+{
+  "name": "SliderSens",
+  "author": "lmkHenlo",
+  "version_number": "1.0.0",
+  "website_url": "",
+  "description": "Adds a second decimal place to the sensitivity sliders in Super Battle Golf: steps of 0.01, with arrow-key and gamepad fine-tuning. Client-side: only you need it.",
+  "dependencies": [
+    "BepInEx-BepInExPack-5.4.2305"
+  ]
+}

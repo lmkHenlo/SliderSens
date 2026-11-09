@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>SliderSens</AssemblyName>
+    <RootNamespace>SliderSens</RootNamespace>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>disable</Nullable>
+    <Version>1.0.0</Version>
+    <Authors>lmkHenlo</Authors>
+    <Company>lmkHenlo</Company>
+    <Copyright>Copyright (c) 2026 lmkHenlo</Copyright>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <DebugType>embedded</DebugType>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+
+    <!--
+      Point this at your game install, or build with:
+        dotnet build -c Release -p:GameDir="D:\SteamLibrary\steamapps\common\Super Battle Golf"
+    -->
+    <GameDir Condition="'$(GameDir)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Super Battle Golf</GameDir>
+    <!-- The *_Data folder is named after the game's .exe. Fix this if yours differs. -->
+    <GameDataDir Condition="'$(GameDataDir)' == ''">$(GameDir)\Super Battle Golf_Data</GameDataDir>
+    <ManagedDir>$(GameDataDir)\Managed</ManagedDir>
+    <!-- r2modman users: point this at your profile folder that contains core\BepInEx.dll -->
+    <BepInExDir Condition="'$(BepInExDir)' == ''">$(GameDir)\BepInEx</BepInExDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="BepInEx">
+      <HintPath>$(BepInExDir)\core\BepInEx.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(BepInExDir)\core\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <!-- Every game/Unity assembly, minus the .NET BCL (supplied by netstandard2.1). -->
+    <Reference Include="$(ManagedDir)\*.dll"
+               Exclude="$(ManagedDir)\mscorlib.dll;$(ManagedDir)\netstandard.dll;$(ManagedDir)\System.dll;$(ManagedDir)\System.*.dll;$(ManagedDir)\Microsoft.*.dll;$(ManagedDir)\Mono.*.dll">
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="CheckPaths" BeforeTargets="ResolveAssemblyReferences">
+    <Error Condition="!Exists('$(ManagedDir)\GameAssembly.dll')"
+           Text="GameAssembly.dll not found in '$(ManagedDir)'. Set GameDir / GameDataDir in SliderSens.csproj." />
+    <Error Condition="!Exists('$(BepInExDir)\core\BepInEx.dll')"
+           Text="BepInEx not found in '$(BepInExDir)'. Install BepInEx 5 (x64) into the game folder and run the game once, or set BepInExDir." />
+  </Target>
+
+</Project>
